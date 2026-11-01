@@ -1,0 +1,21 @@
+- name: Create application directory
+  file:
+    path: "{{ user_home_dir }}"
+    state: directory
+    owner: "{{ linux_name }}"
+    group: "{{ linux_name }}"
+    
+- name: Copy docker compose 
+  copy:
+    src: docker-compose-full.yaml
+    dest: /home/jady/docker-compose.yaml
+
+- name: Docker login
+  community.docker.docker_login:
+    username: "{{ docker_username }}"
+    password: "{{ docker_password }}"
+  no_log: true
+  
+- name: Start containers from compose
+  community.docker.docker_compose_v2:
+    project_src:  /home/jady
